@@ -8,66 +8,105 @@ using namespace std;
 void DrawLine(void)
 {
     int x0, y0, x1, y1, dx, dy, x, y, p;
-    float M;
 
     std::cout << "Digite a coordenada (x, y) do primeiro pixel!";
-        std::cin >> x0 >> y0;
+    std::cin >> x0 >> y0;
     std::cout << "Digite a coordenada (x, y) do segundo pixel!";
-        std::cin >> x1 >> y1;
+    std::cin >> x1 >> y1;
 
     x = x0;
     y = y0;
     dx = x1 - x0;
     dy = y1 - y0;
-    p = 2 * dy - dx;
-    if ((x1 - x0) == 0) {
-        M = dy;
-    }
-    else {
-        M = dy / dx;
-    }
+    p = 0;
 
-    if (M < 1) {
-        while (x < x1) {
-            if (p >= 0) {
-                FBptr[x * 4 + y * 512 * 4] = 255;
-                FBptr[x * 4 + y * 512 * 4 + 1] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 2] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 3] = 255;
-                y = y + 1;
-                p = p + 2 * dy - 2 * dx;
-            }
-            else {
-                FBptr[x * 4 + y * 512 * 4] = 255;
-                FBptr[x * 4 + y * 512 * 4 + 1] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 2] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 3] = 255;
-                p = p + 2 * dy;
-            }
+    if ((dx > 0) && (dy  > 0) && (dx >= dy)) {                     //Calcula no primeiro octante
+        while (x <= x1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
             x = x + 1;
+            p = p + 2*dy;
+            if (p >= dx) {
+                y = y + 1;
+                p = p - 2 * dx;
+            }
         }
-    }
-    else  if (M >= 1) {
-        while (y < y1) {
-            if (p >= 0) {
-                FBptr[x * 4 + y * 512 * 4] = 255;
-                FBptr[x * 4 + y * 512 * 4 + 1] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 2] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+    } else if ((dx > 0) && (dy > 0) && (dy >= dx)) {                     //Calcula no segundo octante
+        while (y <= y1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            y = y + 1;
+            p = p + 2 * dx;
+            if (p >= dx) {
                 x = x + 1;
-                p = p + 2 * dy - 2 * dx;
+                p = p - 2 * dy;
             }
-            else {
-                FBptr[x * 4 + y * 512 * 4] = 255;
-                FBptr[x * 4 + y * 512 * 4 + 1] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 2] = 0;
-                FBptr[x * 4 + y * 512 * 4 + 3] = 255;
-                p = p + 2 * dx;
+        }
+    } else if ((dx < 0) && (dy < 0) && (abs(dx) >= abs(dy))) {                     //Calcula o terceiro octante
+        while (x >= x1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            x = x - 1;
+            p = p + 2 * dy;
+            if (p <= dx) {
+                y = y - 1;
+                p = p - 2 * dx;
             }
+        }
+    } else if ((dx < 0) && (dy < 0) && (abs(dy) >= abs(dx))) {                      //Calcula o quarto octante
+        while (y >= y1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            y = y - 1;
+            p = p + 2 * dx;
+            if (p <= dy) {
+                x = x - 1;
+                p = p - 2 * dy;
+            }
+        }
+    } else if ((dx == 0) && (dy > 0)) {                                      //Calcula se a reta é vertical caso o dy seja positivo
+        while (y <= y1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
             y = y + 1;
         }
+    } else if ((dy == 0) && (dx > 0)) {                                      //Calcula se a reta é horizontal caso o dx seja positivo
+        while (x <= x1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            x = x + 1;
+        }
+    } else if ((dx == 0) && (dy < 0)) {                                      //Calcula se a reta é vertical caso o dy seja negativo
+        while (y >= y1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            y = y - 1;
+        }
+    } else if ((dy == 0) && (dx < 0)) {                                      //Calcula se a reta é horizontal caso o dx seja negativo
+        while (x >= x1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            x = x - 1;
+        }
     }
-}   
+}
+   
 void PutPixel(void) 
 {   
     // Escreve um pixel vermelho na posição (x, y) da tela:     para o pixel aparecer na posição (x, y) escolhida é necessário fazer o cálculo:  i = x * 4 + y * 512 * 4
@@ -92,7 +131,7 @@ void DrawTriangle(void)
 //-----------------------------------------------------------------------------
 void MyGlDraw(void)
 {
-    PutPixel();
+    //PutPixel();
     DrawLine();
     DrawTriangle();
 }
