@@ -5,23 +5,18 @@
 
 using namespace std;
  
-void DrawLine(void)
+void DrawLine(int *x0, int *y0, int *x1, int *y1)
 {
-    int x0, y0, x1, y1, dx, dy, x, y, p;
+    int dx, dy, x, y, p;
 
-    std::cout << "Digite a coordenada (x, y) do primeiro pixel!";
-    std::cin >> x0 >> y0;
-    std::cout << "Digite a coordenada (x, y) do segundo pixel!";
-    std::cin >> x1 >> y1;
-
-    x = x0;
-    y = y0;
-    dx = x1 - x0;
-    dy = y1 - y0;
+    x = *x0;
+    y = *y0;
+    dx = *x1 - *x0;
+    dy = *y1 - *y0;
     p = 0;
 
     if ((dx > 0) && (dy  > 0) && (dx >= dy)) {                     //Calcula no primeiro octante
-        while (x <= x1) {
+        while (x <= *x1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -34,7 +29,7 @@ void DrawLine(void)
             }
         }
     } else if ((dx > 0) && (dy > 0) && (dy >= dx)) {                     //Calcula no segundo octante
-        while (y <= y1) {
+        while (y <= *y1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -47,7 +42,7 @@ void DrawLine(void)
             }
         }
     } else if ((dx < 0) && (dy < 0) && (abs(dx) >= abs(dy))) {                     //Calcula o terceiro octante
-        while (x >= x1) {
+        while (x >= *x1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -60,7 +55,7 @@ void DrawLine(void)
             }
         }
     } else if ((dx < 0) && (dy < 0) && (abs(dy) >= abs(dx))) {                      //Calcula o quarto octante
-        while (y >= y1) {
+        while (y >= *y1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -73,7 +68,7 @@ void DrawLine(void)
             }
         }
     } else if ((dx < 0) && (dy > 0) && (abs(dx) >= dy)) {                     //Calcula o quinto octante
-        while (x >= x1) {
+        while (x >= *x1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -86,7 +81,7 @@ void DrawLine(void)
             }
         }
     } else if ((dx < 0) && (dy > 0) && (dy >= abs(dx))) {                     //Calcula o sexto octante
-        while (y <= y1) {
+        while (y <= *y1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -99,7 +94,7 @@ void DrawLine(void)
             }
         }
     }else if ((dx > 0) && (dy < 0) && (dx >= abs(dy))) {                     //Calcula o sétimo octante
-        while (x <= x1) { 
+        while (x <= *x1) { 
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -112,7 +107,7 @@ void DrawLine(void)
             }
         }
     } else if ((dx > 0) && (dy < 0) && (abs(dy) >= dx)) {                     //Calcula o oitavo octante
-        while (y >= y1) {
+        while (y >= *y1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -125,7 +120,7 @@ void DrawLine(void)
             }
         }
     } else if ((dx == 0) && (dy > 0)) {                                      //Calcula se a reta é vertical caso o dy seja positivo
-        while (y <= y1) {
+        while (y <= *y1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -133,7 +128,7 @@ void DrawLine(void)
             y = y + 1;
         }
     } else if ((dy == 0) && (dx > 0)) {                                      //Calcula se a reta é horizontal caso o dx seja positivo
-        while (x <= x1) {
+        while (x <= *x1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -141,7 +136,7 @@ void DrawLine(void)
             x = x + 1;
         }
     } else if ((dx == 0) && (dy < 0)) {                                      //Calcula se a reta é vertical caso o dy seja negativo
-        while (y >= y1) {
+        while (y >= *y1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -149,7 +144,7 @@ void DrawLine(void)
             y = y - 1;
         }
     } else if ((dy == 0) && (dx < 0)) {                                      //Calcula se a reta é horizontal caso o dx seja negativo
-        while (x >= x1) {
+        while (x >= *x1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
             FBptr[x * 4 + y * 512 * 4 + 1] = 0;
             FBptr[x * 4 + y * 512 * 4 + 2] = 0;
@@ -175,9 +170,11 @@ void PutPixel(void)
     FBptr[i + 3] = 255; // componente A                        FBptr[i+3] 
 }
 
-void DrawTriangle(void) 
+void DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 {
-     
+    DrawLine(&x1, &y1, &x2, &y2);
+    DrawLine(&x2, &y2, &x3, &y3);
+    DrawLine(&x1, &y1, &x3, &y3);
 }
  
 //-----------------------------------------------------------------------------
@@ -190,10 +187,23 @@ void MyGlDraw(void)
         PutPixel();
     }
     else if (a == 2) {
-        DrawLine();
+        int xi, yi, xf, yf;
+        std::cout << "Digite a coordenada (x, y) do primeiro pixel!";
+        std::cin >> xi >> yi;
+        std::cout << "Digite a coordenada (x, y) do segundo pixel!";
+        std::cin >> xf >> yf;
+        DrawLine(&xi, &yi, &xf, &yf);
     }
     else if (a == 3) {
-        //DrawTriangle();
+        int a1, b1, a2, b2, a3, b3;
+        std::cout << "Digite a coordenada (x, y) do primeiro pixel!";
+        std::cin >> a1 >> b1;
+        std::cout << "Digite a coordenada (x, y) do segundo pixel!";
+        std::cin >> a2 >> b2;
+        std::cout << "Digite a coordenada (x, y) do terceiro pixel!";
+        std::cin >> a3 >> b3;
+
+        DrawTriangle(a1, b1, a2, b2, a3, b3);
     }
     else {
         std::cout << "entrada desconhecida;";
