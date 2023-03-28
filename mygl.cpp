@@ -72,6 +72,58 @@ void DrawLine(void)
                 p = p - 2 * dy;
             }
         }
+    } else if ((dx < 0) && (dy > 0) && (abs(dx) >= dy)) {                     //Calcula o quinto octante
+        while (x >= x1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            x = x - 1;
+            p = p - 2 * dy;
+            if (p <= dx) {
+                y = y + 1;
+                p = p - 2 * dx;
+            }
+        }
+    } else if ((dx < 0) && (dy > 0) && (dy >= abs(dx))) {                     //Calcula o sexto octante
+        while (y <= y1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            y = y + 1;
+            p = p - 2 * dx;
+            if (p >= dy) {
+                x = x - 1;
+                p = p - 2 * dy;
+            }
+        }
+    }else if ((dx > 0) && (dy < 0) && (dx >= abs(dy))) {                     //Calcula o sétimo octante
+        while (x <= x1) { 
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            x = x + 1;
+            p = p - 2 * dy;
+            if (p >= dx) {
+                y = y - 1;
+                p = p - 2 * dx;
+            }
+        }
+    } else if ((dx > 0) && (dy < 0) && (abs(dy) >= dx)) {                     //Calcula o oitavo octante
+        while (y >= y1) {
+            FBptr[x * 4 + y * 512 * 4] = 255;
+            FBptr[x * 4 + y * 512 * 4 + 1] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 2] = 0;
+            FBptr[x * 4 + y * 512 * 4 + 3] = 255;
+            y = y - 1;
+            p = p - 2 * dx;
+            if (p <= dy) {
+                x = x + 1;
+                p = p - 2 * dy;
+            }
+        }
     } else if ((dx == 0) && (dy > 0)) {                                      //Calcula se a reta é vertical caso o dy seja positivo
         while (y <= y1) {
             FBptr[x * 4 + y * 512 * 4] = 255;
@@ -131,10 +183,6 @@ void DrawTriangle(void)
 //-----------------------------------------------------------------------------
 void MyGlDraw(void)
 {
-   /* //PutPixel();
-    DrawLine();
-    DrawTriangle();
-    */
     int a;
     std::cout << "O que deseja fazer? (1 para plotar o pixel, 2 para traçar a linha, 3 para o triangulo)";
     std::cin >> a;
