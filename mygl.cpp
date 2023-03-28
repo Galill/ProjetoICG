@@ -131,7 +131,24 @@ void DrawTriangle(void)
 //-----------------------------------------------------------------------------
 void MyGlDraw(void)
 {
-    //PutPixel();
+   /* //PutPixel();
     DrawLine();
     DrawTriangle();
+    */
+    int a;
+    std::cout << "O que deseja fazer? (1 para plotar o pixel, 2 para traçar a linha, 3 para o triangulo)";
+    std::cin >> a;
+    if (a == 1) {
+        PutPixel();
+    }
+    else if (a == 2) {
+        DrawLine();
+    }
+    else if (a == 3) {
+        //DrawTriangle();
+    }
+    else {
+        std::cout << "entrada desconhecida;";
+        exit;
+    }
 }
