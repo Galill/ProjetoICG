@@ -7,7 +7,7 @@
 static void MyGlDraw(void);
 
 static void PutPixel(void);
-static void DrawLine(void);
-static void DrawTriangle(void);
+static void DrawLine(int *a, int *b, int *c, int *d);
+static void DrawTriangle(int a, int b, int c, int d, int e, int f);
 
 #endif
