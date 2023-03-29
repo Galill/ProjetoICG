@@ -172,8 +172,11 @@ void PutPixel(void)
 
 void DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 {
+    //Desenha uma linha ligando os dois primeiros pixels
     DrawLine(&x1, &y1, &x2, &y2);
+    //Desenha uma linha ligando o segundo e o terceiro pixel
     DrawLine(&x2, &y2, &x3, &y3);
+    //Desenha uma linha ligando o primeiro e o terceiro pixel
     DrawLine(&x1, &y1, &x3, &y3);
 }
  
@@ -181,7 +184,7 @@ void DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 void MyGlDraw(void)
 {
     int a;
-    std::cout << "O que deseja fazer? (1 para plotar o pixel, 2 para traçar a linha, 3 para o triangulo)";
+    std::cout << "O que deseja fazer? (1 para plotar o pixel, 2 para traçar a linha, 3 para o triangulo, 4 para traçar oito octantes, 5 para desenhar um triangulo padrão)";
     std::cin >> a;
     if (a == 1) {
         PutPixel();
@@ -204,6 +207,36 @@ void MyGlDraw(void)
         std::cin >> a3 >> b3;
 
         DrawTriangle(a1, b1, a2, b2, a3, b3);
+    }
+    else if(a == 4){
+        int coord1 = 0, coord2 = 256, coord3 = 512;
+
+        //Desenha a linha (0, 0) (256, 256)
+        DrawLine(&coord1, &coord1, &coord2, &coord2);
+        //Desenha a linha (256, 256) (512, 512)
+        DrawLine(&coord2, &coord2, &coord3, &coord3);
+        //Desenha a linha (256, 0) (256, 256)
+        DrawLine(&coord2, &coord1, &coord2, &coord2);
+        //Desenha a linha (256, 256) (256, 512)
+        DrawLine(&coord2, &coord1, &coord2, &coord3);
+        //Desenha a linha (512, 0) (256, 256)
+        DrawLine(&coord3, &coord1, &coord2, &coord2);
+        //Desenha a linha (256, 256) (0, 512)
+        DrawLine(&coord2, &coord2, &coord1, &coord3);
+        //Desenha a linha (0, 256) (256, 256)
+        DrawLine(&coord1, &coord2, &coord2, &coord2);
+        //Desenha a linha (256, 256) (512, 256)
+        DrawLine(&coord2, &coord2, &coord3, &coord2);
+
+    }
+    else if(a == 5) {
+        int j = 30, k = 256, l = 482;
+
+        //Desenha um triangulo a partir dos pixeis (256, 30) (30, 256) (482, 256)
+        DrawLine(&k, &j, &j, &k);
+        DrawLine(&k, &j, &l, &k);
+        DrawLine(&j, &k, &l, &k);
+
     }
     else {
         std::cout << "entrada desconhecida;";
